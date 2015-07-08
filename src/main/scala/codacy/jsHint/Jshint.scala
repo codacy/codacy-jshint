@@ -8,7 +8,7 @@ import codacy.jshint.JsHintPattern._
 import play.api.libs.json._
 
 import scala.sys.process._
-import scala.util.Try
+import scala.util.{Success, Try}
 
 object Jshint extends Tool{
 
@@ -20,19 +20,21 @@ object Jshint extends Tool{
 
   private[this] lazy val minusPrefix = "$minus"
 
-  def apply(sourcePath:Path, patterns:Seq[PatternDef], files:Option[Set[Path]])(implicit spec:Spec): Try[Iterable[Result]] = {
-    lazy val ruleIds = patterns.map(_.patternId).toSet
+  def apply(sourcePath:Path, patterns:Option[Seq[PatternDef]], files:Option[Set[Path]])(implicit spec:Spec): Try[Iterable[Result]] = {
 
-    fileForConfig(configFromPatterns(patterns,spec.patterns)).map{ case configFile =>
+    def isKeep(patternId: PatternId):Boolean = {
+      patterns.map( _.exists(_.patternId == patternId) ).getOrElse(true)
+    }
 
-      val finalPath = files.map(_.map(_.toString).mkString(" ")).getOrElse(sourcePath.toAbsolutePath.toString)
+    patterns.map{ case patterns => fileForConfig(configFromPatterns(patterns,spec.patterns)).map(Option.apply) }.
+    getOrElse(Success(Option.empty[Path])).map{ case maybeConfig =>
 
-      val configPath = configFile.toAbsolutePath().toString
-
-      val cmd = s"""jshint --config $configPath --verbose $finalPath""".split(" ").toList
+      val configPart = maybeConfig.map{ case path => Seq("--config", path.toAbsolutePath.toString) }.getOrElse(Seq.empty)
+      val finalPath = files.getOrElse(Seq(sourcePath)).map(_.toAbsolutePath.toString)
+      val cmd = Seq("jshint") ++ configPart ++ Seq("--verbose") ++ finalPath
 
       cmd.lineStream_!.map( outputLineAsResult ).
-      collect{ case Some(result) if ruleIds.contains(result.patternId) => result }
+      collect{ case Some(result) if isKeep(result.patternId) => result }
     }
   }
 
