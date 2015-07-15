@@ -35,32 +35,8 @@ val jreUrl = s"http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION_MAJOR" 
 val jreExtractedFolderName = s"""jdk1.$JAVA_VERSION_MAJOR.0_$JAVA_VERSION_MINOR/jre"""
 
 val installAll =
-  s"""apk-install bash curl ca-certificates nodejs python make gcc g++ libc-dev &&
-    |npm install -g jshint &&
-    |cd /tmp &&
-    |curl -o glibc-2.21-r2.apk "https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/glibc-2.21-r2.apk" &&
-    |apk add --allow-untrusted glibc-2.21-r2.apk &&
-    |curl -o glibc-bin-2.21-r2.apk "https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/glibc-bin-2.21-r2.apk" &&
-    |apk add --allow-untrusted glibc-bin-2.21-r2.apk &&
-    |/usr/glibc/usr/bin/ldconfig /lib /usr/glibc/usr/lib &&
-    |curl -L -O -H "Cookie: oraclelicense=accept-securebackup-cookie" -k "$jreUrl" &&
-    |gunzip -c $jreFilenameGzip | tar -xf - && mv $jreExtractedFolderName /jre && rm /jre/bin/jjs &&
-    |rm /jre/bin/keytool &&
-    |rm /jre/bin/orbd &&
-    |rm /jre/bin/pack200 &&
-    |rm /jre/bin/policytool &&
-    |rm /jre/bin/rmid &&
-    |rm /jre/bin/rmiregistry &&
-    |rm /jre/bin/servertool &&
-    |rm /jre/bin/tnameserv &&
-    |rm /jre/bin/unpack200 &&
-    |rm /jre/lib/ext/nashorn.jar &&
-    |rm /jre/lib/jfr.jar &&
-    |rm -rf /jre/lib/jfr &&
-    |rm -rf /jre/lib/oblique-fonts &&
-    |rm -rf /tmp/* /var/cache/apk/* &&
-    |apk del curl ca-certificates &&
-    |echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf""".stripMargin.replaceAll(System.lineSeparator()," ")
+  s"""apk update && apk add bash curl nodejs python &&
+    |npm install -g jshint""".stripMargin.replaceAll(System.lineSeparator()," ")
 
 mappings in Universal <++= (resourceDirectory in Compile) map { (resourceDir: File) =>
   val src = resourceDir / "docs"
@@ -74,14 +50,10 @@ mappings in Universal <++= (resourceDirectory in Compile) map { (resourceDir: Fi
 
 daemonUser in Docker := "root"
 
-dockerCommands := Seq(
-  Cmd("FROM","gliderlabs/alpine:3.2"),
-  Cmd("RUN", installAll),
-  Cmd("ENV","JAVA_HOME /jre"),
-  Cmd("ENV", "PATH ${PATH}:${JAVA_HOME}/bin"),
-  Cmd("ENV", "ENV LANG C.UTF-8")
-) ++ dockerCommands.value.map(cmd => List(cmd)).map{
-    case Cmd("FROM",_) :: _ => Nil //aka drop it
-    case (add@Cmd("ADD","opt /opt")) :: Nil => List(add,Cmd("RUN","mv /opt/docker/docs /docs"))
-    case other => other
-}.flatten
+dockerBaseImage := "frolvlad/alpine-oraclejdk8"
+
+dockerCommands := dockerCommands.value.flatMap{
+  case cmd@Cmd("FROM",_) => List(cmd,Cmd("RUN", installAll))
+  case add@Cmd("ADD","opt /opt") => List(add,Cmd("RUN","mv /opt/docker/docs /docs"))
+  case other => List(other)
+}
