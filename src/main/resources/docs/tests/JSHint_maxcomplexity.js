@@ -1,7 +1,7 @@
-//#Patterns: JSHint_maxcomplexity
+//#Patterns: maxcomplexity
 
 
-//#Warn: JSHint_maxcomplexity
+//#Warn: maxcomplexity
 function name() {
     var duration = +new Date() - start.time,
         isPastHalf = Number(duration) < 250 && Math.abs(delta.x) > 20 || Math.abs(delta.x) > viewport / 2,

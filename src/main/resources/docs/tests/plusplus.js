@@ -1,13 +1,13 @@
-//#Patterns: JSHint_plusplus
+//#Patterns: plusplus
 
 function main() {
 
     var i = 1;
 
-    //#Info: JSHint_plusplus
+    //#Info: plusplus
     i++;
 
-    //#Info: JSHint_plusplus
+    //#Info: plusplus
     i--;
 
     return 'Hello, World!';

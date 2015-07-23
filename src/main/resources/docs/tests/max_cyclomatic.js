@@ -1,4 +1,4 @@
-//#Patterns: JSHint_maxcomplexity: { "maxcomplexity": "3" }
+//#Patterns: maxcomplexity: { "maxcomplexity": "3" }
 
 function main() {
 
@@ -7,7 +7,7 @@ function main() {
     return 'Hello, World';
 }
 
-//#Warn: JSHint_maxcomplexity
+//#Warn: maxcomplexity
 function myFunction(a) {
 
     if(a == 1){

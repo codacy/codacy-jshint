@@ -176,7 +176,7 @@ package object jshint {
     `-W116` -> true,
     /*
      * This should not be enabled
-     *  if this is on the configuration the pattern JSHint_unused
+     *  if this is on the configuration the pattern unused
      *  will give more messages than it should
      */
     //-W117 -> Json.toJson(true),

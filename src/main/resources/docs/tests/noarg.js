@@ -1,11 +1,11 @@
-//#Patterns: JSHint_noarg
+//#Patterns: noarg
 
 function main() {
 
-    //#Warn: JSHint_noarg
+    //#Warn: noarg
     var i = arguments.caller;
 
-    //#Warn: JSHint_noarg
+    //#Warn: noarg
     var j = arguments.callee;
 
     return 'Hello, World!';

@@ -1,4 +1,4 @@
-//#Patterns: JSHint_curly
+//#Patterns: curly
 function main() {
     return 'Hello, World!';
 }
@@ -12,16 +12,16 @@ function _xpto(a, b) {
     }
 
     for(i = 1; i < 5; i+=1)
-        //#Info: JSHint_curly
+        //#Info: curly
         console.log("blah");
     1+1;
 
-//#Info: JSHint_curly
+//#Info: curly
 if (camelCase != not_camel_case) return a
 
 }
 
-//#Info: JSHint_curly
+//#Info: curly
 while(1) break;
 
 main();

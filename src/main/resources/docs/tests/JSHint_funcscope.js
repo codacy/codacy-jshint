@@ -1,10 +1,10 @@
-//#Patterns: JSHint_funcscope
+//#Patterns: funcscope
 
 function test() {
     if (true) {
         var x = 0;
     }
 
-//#Warn: JSHint_funcscope
+//#Warn: funcscope
     x += 1; // Default: 'x' used out of scope.
 }

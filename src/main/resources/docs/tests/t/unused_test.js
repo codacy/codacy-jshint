@@ -1,4 +1,4 @@
-//#Patterns: JSHint_unused: { "unused": "true"}
+//#Patterns: unused: { "unused": "true"}
 
 var chai = require("chai"),
   expect = chai.expect,
@@ -28,7 +28,7 @@ module.exports = (function () {
     return conf;
   }
 
-  //#Warn: JSHint_unused
+  //#Warn: unused
   function getUnusedMethod() {
     return "pretty string";
   }

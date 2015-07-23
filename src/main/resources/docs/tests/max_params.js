@@ -1,4 +1,4 @@
-//#Patterns: JSHint_maxparams: { "maxparams": "7" }
+//#Patterns: maxparams: { "maxparams": "7" }
 
 function main() {
 
@@ -9,7 +9,7 @@ function main() {
   return 'Hello, World';
 }
 
-//#Warn: JSHint_maxparams
+//#Warn: maxparams
 function myFunction(a, b, c, d, e, f, g, h) {
 
   return a + b + c + d + e + f + g + h;

@@ -1,6 +1,6 @@
-//#Patterns: JSHint_notypeof
+//#Patterns: notypeof
 
-//#Warn: JSHint_notypeof
+//#Warn: notypeof
 if (typeof a == "fuction") {
     /* ... */
 }

@@ -1,6 +1,6 @@
-//#Patterns: JSHint_supernew
+//#Patterns: supernew
 
-//#Info: JSHint_supernew
+//#Info: supernew
 var singleton = new function() {
     var privateVar;
 

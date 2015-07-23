@@ -1,7 +1,7 @@
-//#Patterns: JSHint_debug
+//#Patterns: debug
 
 
 var x = 1;
-//#Warn: JSHint_debug
+//#Warn: debug
 debugger;
 var b = 3;

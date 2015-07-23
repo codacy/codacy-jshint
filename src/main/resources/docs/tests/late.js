@@ -1,9 +1,9 @@
-//#Patterns: JSHint_latedef
+//#Patterns: latedef
 
 function main() {
 
     i = 2;
-    //#Warn: JSHint_latedef
+    //#Warn: latedef
     var i;
 
     return 'Hello, World!';

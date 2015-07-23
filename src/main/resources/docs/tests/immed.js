@@ -1,11 +1,11 @@
-//#Patterns: JSHint_immed
+//#Patterns: immed
 
-//#Info: JSHint_immed
+//#Info: immed
 var cenas = function() {}();
 
 var cenas2 = (function() {
 
-    //#Info: JSHint_immed
+    //#Info: immed
     var blaaa = function(){}();
 
     while(true){

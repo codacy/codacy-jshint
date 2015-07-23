@@ -123,12 +123,6 @@
       } ],
       "level" : "Warning"
     }, {
-      "patternId" : "trail",
-      "category" : "CodeStyle",
-      "title" : "Prohibit trailing whitespaces",
-      "description" : "Prohibits trailing whitespaces which can cause problems with multi-line strings",
-      "level" : "Info"
-    }, {
       "patternId" : "maxparams",
       "category" : "Complexity",
       "title" : "Enforce number of function parameters",
@@ -189,12 +183,6 @@
       "category" : "ErrorProne",
       "title" : "Prohibit debugger statements",
       "description" : "Prohibits debugger statements",
-      "level" : "Warning"
-    }, {
-      "patternId" : "null",
-      "category" : "ErrorProne",
-      "title" : "Prohibit == null comparisons",
-      "description" : "Prohibits == null comparisons",
       "level" : "Warning"
     }, {
       "patternId" : "evil",

@@ -1,14 +1,14 @@
-//#Patterns: JSHint_boss
+//#Patterns: boss
 
 
 var people={};
-//#Warn: JSHint_boss
+//#Warn: boss
 for (var i = 0, person; person = people[i]; i++) {
 
 }
 
 var variable;
 function test() {
-//#Warn: JSHint_boss
+//#Warn: boss
     return variable = 'test';
 }

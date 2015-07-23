@@ -1,4 +1,4 @@
-//#Patterns: JSHint_maxstatements: { "maxstatements": "10" }
+//#Patterns: maxstatements: { "maxstatements": "10" }
 
 function main() {
 
@@ -9,7 +9,7 @@ function main() {
     return 'Hello, World';
 }
 
-//#Warn: JSHint_maxstatements
+//#Warn: maxstatements
 function myFunction(){
 
     var a = 0;

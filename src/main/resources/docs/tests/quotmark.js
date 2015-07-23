@@ -1,13 +1,13 @@
-//#Patterns: JSHint_quotmark
+//#Patterns: quotmark
 
 function main() {
 
     var i = "foo";
 
-    //#Info: JSHint_quotmark
+    //#Info: quotmark
     var j = 'bar';
 
-    //#Info: JSHint_quotmark
+    //#Info: quotmark
     return 'Hello, World!';
 }
 

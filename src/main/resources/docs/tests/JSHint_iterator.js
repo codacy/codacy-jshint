@@ -1,6 +1,6 @@
-//#Patterns: JSHint_iterator
+//#Patterns: iterator
 
-//#Warn: JSHint_iterator
+//#Warn: iterator
 Range.prototype.__iterator__ = function(){
     return new RangeIterator(this);
 };

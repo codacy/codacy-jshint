@@ -1,4 +1,4 @@
-//->Patterns: JSHint_maxdepth
+//->Patterns: maxdepth
 
 function main(meaning) {
     var day = true;
@@ -7,7 +7,7 @@ function main(meaning) {
         while (day) {
             shuffle();
             if (tired) {
-//->Warn: JSHint_maxdepth
+//->Warn: maxdepth
                 while (false) {
                     sleep();
                 }

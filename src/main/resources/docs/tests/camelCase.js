@@ -1,14 +1,14 @@
-//#Patterns: JSHint_camelcase
+//#Patterns: camelcase
 function main() {
     return 'Hello, World!';
 }
 
-//#Info: JSHint_camelcase
+//#Info: camelcase
 var notCamel_case;
 
-//#Info: JSHint_camelcase
+//#Info: camelcase
 function _xpto(a_cenas, bAAaaaA) {
-    //#Info: JSHint_camelcase
+    //#Info: camelcase
     var not_camel_case;
     var camelCase;
 
@@ -16,7 +16,7 @@ function _xpto(a_cenas, bAAaaaA) {
         return a
     }
 
-//#Info: JSHint_camelcase
+//#Info: camelcase
    if (camelCase != not_camel_case) {
         return a
     }

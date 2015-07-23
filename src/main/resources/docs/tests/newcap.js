@@ -1,10 +1,10 @@
-//#Patterns: JSHint_newcap
+//#Patterns: newcap
 
 function main() {
 
     i = 2;
 
-    //#Info: JSHint_newcap
+    //#Info: newcap
     var f = new foo();
 
     var i;

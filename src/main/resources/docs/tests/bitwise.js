@@ -1,16 +1,16 @@
-//#Patterns: JSHint_bitwise, JSHint_curly
+//#Patterns: bitwise, curly
 
-//#Warn: JSHint_bitwise
+//#Warn: bitwise
 if(true == false & true)
-//#Info: JSHint_curly
+//#Info: curly
     console.log("cenas");
 
 function cenas() {
 
-    //#Warn: JSHint_bitwise
+    //#Warn: bitwise
     var cenas = 1 & 2;
 
-    //#Warn: JSHint_bitwise
-    //#Info: JSHint_curly
+    //#Warn: bitwise
+    //#Info: curly
     if(true | false) return 0;
 }

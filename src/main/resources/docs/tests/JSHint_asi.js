@@ -1,6 +1,6 @@
-//#Patterns: JSHint_asi
+//#Patterns: asi
 
 
-//#Info: JSHint_asi
+//#Info: asi
 var x = 1
 var b = 3;

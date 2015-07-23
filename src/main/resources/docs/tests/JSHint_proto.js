@@ -1,6 +1,6 @@
-//#Patterns: JSHint_proto
+//#Patterns: proto
 
-//#Warn: JSHint_proto
+//#Warn: proto
 Range.__proto__.blabla = function(){
     return 1;
 };

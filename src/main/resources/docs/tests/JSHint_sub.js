@@ -1,4 +1,4 @@
-//#Patterns: JSHint_sub
+//#Patterns: sub
 
-//#Info: JSHint_sub
+//#Info: sub
 person['name'];

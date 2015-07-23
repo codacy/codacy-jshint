@@ -1,5 +1,5 @@
-//#Patterns: JSHint_multistr
+//#Patterns: multistr
 
-//#Warn: JSHint_multistr
+//#Warn: multistr
 var str = "Hello \
     World";

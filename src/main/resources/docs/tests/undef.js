@@ -1,8 +1,8 @@
-//#Patterns: JSHint_undef
+//#Patterns: undef
 
 function main() {
 
-    //#Warn: JSHint_undef
+    //#Warn: undef
     j = 1;
 
     return 'Hello, World!';

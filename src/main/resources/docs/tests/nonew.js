@@ -1,4 +1,4 @@
-//#Patterns: JSHint_nonew
+//#Patterns: nonew
 
 function Foo(){
     return "bar";
@@ -6,7 +6,7 @@ function Foo(){
 
 function main() {
 
-    //#Info: JSHint_nonew
+    //#Info: nonew
     new Foo();
 
     return 'Hello, World!';

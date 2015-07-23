@@ -1,11 +1,11 @@
-//#Patterns: JSHint_forin, JSHint_freeze
+//#Patterns: forin, freeze
 
 var team = ["Mr. Pink", "Mr. White", "Nice Guy Eddie"];
-//#Warn: JSHint_freeze
+//#Warn: freeze
 Array.prototype.each = function () { /* something */
 }
 
-//#Warn: JSHint_forin
+//#Warn: forin
 for (var person in team) {
     window.alert(team[person] + ": I don't tip.");
 }
@@ -26,7 +26,7 @@ Object.defineProperty(Array.prototype, "each", {
 });
 
 
-//#Warn: JSHint_forin
+//#Warn: forin
 for (var person in team) {
     window.alert(team[person] + ": I don't tip.");
 }

@@ -1,14 +1,14 @@
-//#Patterns: JSHint_maxlen: { "maxlen": "80" }
+//#Patterns: maxlen: { "maxlen": "80" }
 function main() {
 
     i = 2;
 
     var i;
 
-    //#Info: JSHint_maxlen
+    //#Info: maxlen
     var x = 'Hello, World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!';
 
 
-    //#Info: JSHint_maxlen
+    //#Info: maxlen
     return 'Hello, World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!';
 }

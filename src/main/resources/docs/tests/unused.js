@@ -1,8 +1,8 @@
-//#Patterns: JSHint_unused
+//#Patterns: unused
 
 function main() {
 
-    //#Warn: JSHint_unused
+    //#Warn: unused
     var j;
 
     return 'Hello, World!';
