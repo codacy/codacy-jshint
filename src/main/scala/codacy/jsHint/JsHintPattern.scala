@@ -1,6 +1,6 @@
 package codacy.jshint
 
-private[jshint] object JsHintPattern extends Enumeration{
+private[jshint] object JsHintPattern extends Enumeration {
   type JsHintPattern = Value
   val bitwise,
   camelcase,

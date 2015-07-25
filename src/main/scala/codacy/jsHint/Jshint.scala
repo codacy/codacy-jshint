@@ -10,147 +10,164 @@ import play.api.libs.json._
 import scala.sys.process._
 import scala.util.{Success, Try}
 
-object Jshint extends Tool{
+object Jshint extends Tool {
 
-  private[this] implicit class PatternIdentifier(ruleId: PatternId){
-    def asJsHintPattern:Option[JsHintPattern] = JsHintPattern.values.find(_.toString() == ruleId.value)
+  private[this] implicit class PatternIdentifier(ruleId: PatternId) {
+    def asJsHintPattern: Option[JsHintPattern] = JsHintPattern.values.find(_.toString == ruleId.value)
   }
 
   private[this] lazy val RegMatch = """(.*):[ line]*([0-9]*),[ col]*([0-9]*),(.*)\((.*)\)""".r
 
   private[this] lazy val minusPrefix = "$minus"
 
-  def apply(sourcePath:Path, patterns:Option[Seq[PatternDef]], files:Option[Set[Path]])(implicit spec:Spec): Try[Iterable[Result]] = {
+  def apply(sourcePath: Path, patterns: Option[Seq[PatternDef]], files: Option[Set[Path]])(implicit spec: Spec): Try[Iterable[Result]] = {
 
-    def isKeep(patternId: PatternId):Boolean = {
-      patterns.map( _.exists(_.patternId == patternId) ).getOrElse(true)
+    def isKeep(patternId: PatternId): Boolean = {
+      patterns.map(_.exists(_.patternId == patternId)).getOrElse(true)
     }
 
-    patterns.map{ case patterns => fileForConfig(configFromPatterns(patterns,spec.patterns)).map(Option.apply) }.
-    getOrElse(Success(Option.empty[Path])).map{ case maybeConfig =>
+    println("")
+    println("RUNNING")
+    println("")
+    println(s"$sourcePath")
+    println(patterns.getOrElse(Seq.empty).length)
+    println(files.getOrElse(Set.empty).size)
+    println("")
+    println("")
 
-      val configPart = maybeConfig.map{ case path => Seq("--config", path.toAbsolutePath.toString) }.getOrElse(Seq.empty)
+    patterns.map { patterns => fileForConfig(configFromPatterns(patterns, spec.patterns)).map(Option.apply) }.
+      getOrElse(Success(Option.empty[Path])).map { case maybeConfig =>
+
+      val configPart = maybeConfig.map { case path => Seq("--config", path.toAbsolutePath.toString) }.getOrElse(Seq.empty)
       val finalPath = files.getOrElse(Seq(sourcePath)).map(_.toAbsolutePath.toString)
       val cmd = Seq("jshint") ++ configPart ++ Seq("--verbose") ++ finalPath
 
-      cmd.lineStream_!.map( outputLineAsResult ).
-      collect{ case Some(result) if isKeep(result.patternId) => result }
+      val lines = cmd.lineStream_!.toList
+
+      println("")
+      println(lines.mkString("\n"))
+      println("")
+
+      lines.map(outputLineAsResult).
+        collect { case Some(result) if isKeep(result.patternId) => result }
+      //      cmd.lineStream_!.map(outputLineAsResult).
+      //        collect { case Some(result) if isKeep(result.patternId) => result }
     }
   }
 
-  private[this] def outputLineAsResult(line:String):Option[Result] = Option(line).collect{
-    case raw @ RegMatch(file, line, _, message, error) =>
-      Try(ResultLine(line.toInt)).toOption.flatMap{ case line =>
-        ruleIdAndMessage(message,error).map{ case (ruleId,message) =>
-            Result( SourcePath(file), message, ruleId, line)
+  private[this] def outputLineAsResult(line: String): Option[Result] = Option(line).collect {
+    case raw@RegMatch(file, lineNumber, _, toolMessage, error) =>
+      Try(ResultLine(lineNumber.toInt)).toOption.flatMap { line =>
+        ruleIdAndMessage(toolMessage, error).map { case (ruleId, message) =>
+          Result(SourcePath(file), message, ruleId, line)
         }
       }
   }.flatten
 
-  private[this] def configFromPatterns(patterns:Seq[PatternDef],spec:Set[PatternSpec]): JsObject = {
-    val settings = patterns.foldLeft( BaseSettings ){ (settings,pattern) =>
+  private[this] def configFromPatterns(patterns: Seq[PatternDef], spec: Set[PatternSpec]): JsObject = {
+    val settings = patterns.foldLeft(BaseSettings) { (settings, pattern) =>
 
-      def settingSet[A](param:JsHintPattern, value:A = true )(implicit writes: Writes[A]) =
-        settings.+((param,Json.toJson(value)))
+      def settingSet[A](param: JsHintPattern, value: A = true)(implicit writes: Writes[A]) =
+        settings.+((param, Json.toJson(value)))
 
-      def settingWithParamValue(paramName:JsHintPattern) = {
+      def settingWithParamValue(paramName: JsHintPattern) = {
 
-        lazy val default = spec.collectFirst{ case patternSpec if patternSpec.patternId == pattern.patternId =>
-          patternSpec.parameters.getOrElse(Set.empty).collectFirst{ case paramSpec if paramSpec.name == ParameterName(paramName.toString) =>
+        lazy val default = spec.collectFirst { case patternSpec if patternSpec.patternId == pattern.patternId =>
+          patternSpec.parameters.getOrElse(Set.empty).collectFirst { case paramSpec if paramSpec.name == ParameterName(paramName.toString) =>
             paramSpec.default
           }
         }.flatten
 
-        val value = pattern.parameters.flatMap( _.collectFirst{
+        val value = pattern.parameters.flatMap(_.collectFirst {
           case paramDef if paramDef.name == ParameterName(paramName.toString) => paramDef.value
-        }).orElse( default )
+        }).orElse(default)
 
-        value.map( settingSet(paramName,_) ).getOrElse(settings)
+        value.map(settingSet(paramName, _)).getOrElse(settings)
       }
 
-      pattern.patternId.asJsHintPattern.collect{
-        case v @ `bitwise` =>
+      pattern.patternId.asJsHintPattern.collect {
+        case v@`bitwise` =>
           settingSet(v) - `-W016`
-        case v @ `camelcase` =>
+        case v@`camelcase` =>
           settingSet(v) - `-W106`
-        case v @ `curly` =>
+        case v@`curly` =>
           settingSet(v) - `-W116`
-        case v @ `eqeqeq` =>
+        case v@`eqeqeq` =>
           settingSet(v) - `-W116`
-        case v @ `forin` =>
+        case v@`forin` =>
           settingSet(v) - `-W089`
-        case v @ `freeze` =>
+        case v@`freeze` =>
           settingSet(v) - `-W121`
-        case v @ `immed` =>
+        case v@`immed` =>
           settingSet(v) - `-W062`
-        case v @ `latedef` =>
+        case v@`latedef` =>
           settingWithParamValue(v) - `-W003`
-        case v @ `newcap` =>
+        case v@`newcap` =>
           settingSet(v) - `-W055`
-        case v @ `noarg` =>
+        case v@`noarg` =>
           settingSet(v) - `-W059`
-        case v @ `nonew` =>
+        case v@`nonew` =>
           settingSet(v) - `-W031`
-        case v @ `plusplus` =>
+        case v@`plusplus` =>
           settingSet(v) - `-W016`
-        case v @ `quotmark` =>
+        case v@`quotmark` =>
           settingSet(v) - `-W110`
-        case v @ `undef` =>
+        case v@`undef` =>
           settingSet(v) - `-W117`
-        case v @ `unused` =>
+        case v@`unused` =>
           settingSet(v) - `-W098`
-        case v @ `maxlen` =>
+        case v@`maxlen` =>
           settingWithParamValue(v) - `-W101`
-        case v @ `trail` =>
+        case v@`trail` =>
           settingSet(v) - `-W044`
-        case v @ `maxparams` =>
+        case v@`maxparams` =>
           settingWithParamValue(v) - `-W072`
-        case v @ `maxdepth` =>
-          settingSet(v,3) - `-W073`
-        case v @ `maxstatements` =>
+        case v@`maxdepth` =>
+          settingSet(v, 3) - `-W073`
+        case v@`maxstatements` =>
           settingWithParamValue(v) - `-W071`
-        case v @ `maxcomplexity` =>
+        case v@`maxcomplexity` =>
           settingWithParamValue(v) - `-W074`
-        case v @ `indent` =>
+        case v@`indent` =>
           settingWithParamValue(v) - `-W015`
-        case v @ `asi` =>
+        case v@`asi` =>
           settingSet(v, false) - `-W033`
-        case v @ `boss` =>
+        case v@`boss` =>
           settingSet(v, false) - `-W084` - `-W093`
-        case v @ `debug` =>
+        case v@`debug` =>
           settingSet(v, false) - `-W087`
-        case v @ `null` =>
+        case v@`null` =>
           settingSet(v, false) - `-W041`
-        case v @ `evil` =>
+        case v@`evil` =>
           settingSet(v, false) - `-W054` - `-W060` - `-W061` - `-W066`
-        case v @ `expr` =>
+        case v@`expr` =>
           settingSet(v, false) - `-W030`
-        case v @ `funcscope` =>
+        case v@`funcscope` =>
           settingSet(v, false) - `-W038` - `-W091`
-        case v @ `iterator` =>
+        case v@`iterator` =>
           settingSet(v, false) - `-W104`
-        case v @ `loopfunc` =>
+        case v@`loopfunc` =>
           settingSet(v, false) - `-W083`
-        case v @ `multistr` =>
+        case v@`multistr` =>
           settingSet(v, false) - `-W043`
-        case v @ `notypeof` =>
+        case v@`notypeof` =>
           settingSet(v, false) - `-W122`
-        case v @ `shadow` =>
+        case v@`shadow` =>
           settingSet(v, false) - `-E044` - `-W004`
-        case v @ `proto` =>
+        case v@`proto` =>
           settingSet(v, false) - `-W103`
-        case v @ `sub` =>
+        case v@`sub` =>
           settingSet(v, false) - `-W069`
-        case v @ `supernew` =>
+        case v@`supernew` =>
           settingSet(v, false) - `-W057`
       }.getOrElse(settings)
     }
 
     JsObject(
-      settings.map{ case (key,value) =>
+      settings.map { case (key, value) =>
         val rawKey = key.toString
-        val correctedKey = if(rawKey.startsWith(minusPrefix)) s"-${rawKey.drop(minusPrefix.length)}" else rawKey
-        (correctedKey,value)
+        val correctedKey = if (rawKey.startsWith(minusPrefix)) s"-${rawKey.drop(minusPrefix.length)}" else rawKey
+        (correctedKey, value)
       }.toSeq
     )
   }
@@ -158,17 +175,17 @@ object Jshint extends Tool{
   private[this] def ruleIdAndMessage(message: String, error: String): Option[(PatternId, ResultMessage)] = {
     val msg = message.trim
 
-    JsHintPattern.values.find(_.toString == s"$minusPrefix$error").collect{
-      case `-W116` if msg.matches( """Expected '\{'.*""")                    => curly
-      case `-W116` if msg.matches( """Expected '(===|!==).*""")              => eqeqeq
-      case `-W016` if msg.matches( """.*use of '(&|\|)'.*""")                => bitwise
-      case `-W106` if msg.matches( """.*not in camel case.*""")              => camelcase
-      case `-W003` if msg.matches(""".*was used before it was defined.*""")  => latedef
-      case `-W059` if msg.matches(""".*(caller|callee).*""")                 => noarg
-      case `-W031` if msg.matches("""Do not use 'new' for side effects.*""") => nonew
-      case `-W016` if msg.matches("""Unexpected use of '(\+\+|--)'.*""")     => plusplus
-      case `-W117` if msg.matches(""".*is not defined.*""")                  => undef
-      case `-W098` if msg.matches(""".*is defined but never used.*""")       => unused
+    JsHintPattern.values.find(_.toString == s"$minusPrefix$error").collect {
+      case `-W116` if msg.matches( """Expected '\{'.*""") => curly
+      case `-W116` if msg.matches( """Expected '(===|!==).*""") => eqeqeq
+      case `-W016` if msg.matches( """.*use of '(&|\|)'.*""") => bitwise
+      case `-W106` if msg.matches( """.*not in camel case.*""") => camelcase
+      case `-W003` if msg.matches( """.*was used before it was defined.*""") => latedef
+      case `-W059` if msg.matches( """.*(caller|callee).*""") => noarg
+      case `-W031` if msg.matches( """Do not use 'new' for side effects.*""") => nonew
+      case `-W016` if msg.matches( """Unexpected use of '(\+\+|--)'.*""") => plusplus
+      case `-W117` if msg.matches( """.*is not defined.*""") => undef
+      case `-W098` if msg.matches( """.*is defined but never used.*""") => unused
       case `-W055` => newcap
       case `-W089` => forin
       case `-W121` => freeze
@@ -202,21 +219,21 @@ object Jshint extends Tool{
       case `-W103` => proto
       case `-W069` => sub
       case `-W057` => supernew
-    }.map{ case rawId =>
-      val message = rawId match{
+    }.map { case rawId =>
+      val message = rawId match {
         case `immed` => "You should wrap an immediate function invocation in parenthesis."
         case _ => msg
       }
 
-      (PatternId(rawId.toString),ResultMessage(message))
+      (PatternId(rawId.toString), ResultMessage(message))
     }
   }
 
-  private[this] def fileForConfig(config:JsObject) = tmpfile(".jshintrc",Json.stringify(config))
+  private[this] def fileForConfig(config: JsObject) = tmpfile(".jshintrc", Json.stringify(config))
 
-  private[this] def tmpfile(prefix:String,content:String) = {
+  private[this] def tmpfile(prefix: String, content: String) = {
     Try(Files.write(
-      Files.createTempFile(prefix,""),
+      Files.createTempFile(prefix, ""),
       content.getBytes(StandardCharsets.UTF_8),
       StandardOpenOption.CREATE
     ))
