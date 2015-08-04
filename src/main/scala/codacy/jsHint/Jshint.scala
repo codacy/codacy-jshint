@@ -26,15 +26,6 @@ object Jshint extends Tool {
       patterns.map(_.exists(_.patternId == patternId)).getOrElse(true)
     }
 
-    println("")
-    println("RUNNING")
-    println("")
-    println(s"$sourcePath")
-    println(patterns.getOrElse(Seq.empty).length)
-    println(files.getOrElse(Set.empty).size)
-    println("")
-    println("")
-
     patterns.map { patterns => fileForConfig(configFromPatterns(patterns, spec.patterns)).map(Option.apply) }.
       getOrElse(Success(Option.empty[Path])).map { case maybeConfig =>
 
@@ -42,16 +33,8 @@ object Jshint extends Tool {
       val finalPath = files.getOrElse(Seq(sourcePath)).map(_.toAbsolutePath.toString)
       val cmd = Seq("jshint") ++ configPart ++ Seq("--verbose") ++ finalPath
 
-      val lines = cmd.lineStream_!.toList
-
-      println("")
-      println(lines.mkString("\n"))
-      println("")
-
-      lines.map(outputLineAsResult).
+      cmd.lineStream_!.map(outputLineAsResult).
         collect { case Some(result) if isKeep(result.patternId) => result }
-      //      cmd.lineStream_!.map(outputLineAsResult).
-      //        collect { case Some(result) if isKeep(result.patternId) => result }
     }
   }
 
