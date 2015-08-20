@@ -36,7 +36,13 @@ daemonUser in Docker := "docker"
 
 dockerBaseImage := "frolvlad/alpine-oraclejdk8"
 
-dockerCommands := dockerCommands.value.take(3) ++
-  List(Cmd("RUN", installAll), Cmd("RUN", "mv /opt/docker/docs /docs")) ++
-  List(Cmd("RUN", "adduser -u 2004 -D docker")) ++
-  dockerCommands.value.drop(3)
+dockerCommands := dockerCommands.value.flatMap {
+  case cmd@Cmd("WORKDIR", _) => List(cmd,
+    Cmd("RUN", installAll)
+  )
+  case cmd@(Cmd("ADD", "opt /opt")) => List(cmd,
+    Cmd("RUN", "mv /opt/docker/docs /docs"),
+    Cmd("RUN", "adduser -u 2004 -D docker")
+  )
+  case other => List(other)
+}
