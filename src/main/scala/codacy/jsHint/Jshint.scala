@@ -34,7 +34,7 @@ object Jshint extends Tool {
       val cmd = Seq("jshint") ++ configPart ++ Seq("--verbose") ++ finalPath
 
       cmd.lineStream_!.map(outputLineAsResult).
-        collect { case Some(result) if isKeep(result.patternId) => result }
+        collect { case Some(result:Issue) if isKeep(result.patternId) => result }
     }
   }
 
@@ -42,7 +42,7 @@ object Jshint extends Tool {
     case raw@RegMatch(file, lineNumber, _, toolMessage, error) =>
       Try(ResultLine(lineNumber.toInt)).toOption.flatMap { line =>
         ruleIdAndMessage(toolMessage, error).map { case (ruleId, message) =>
-          Result(SourcePath(file), message, ruleId, line)
+          Issue(SourcePath(file), message, ruleId, line)
         }
       }
   }.flatten
