@@ -1,7 +1,5 @@
 import com.typesafe.sbt.packager.docker._
 
-resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
-
 name := """codacy-engine-jshint"""
 
 version := "1.0-SNAPSHOT"
@@ -10,11 +8,15 @@ val languageVersion = "2.11.7"
 
 scalaVersion := languageVersion
 
-libraryDependencies += "com.typesafe.play" %% "play-json" % "2.3.8"
+resolvers ++= Seq(
+  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/releases",
+  "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
+)
 
-lazy val root = project.in(file(".")).dependsOn(codacyEngine)
-
-lazy val codacyEngine = uri("ssh://git@github.com/codacy/codacy-engine-scala-seed.git")
+libraryDependencies ++= Seq(
+  "com.typesafe.play" %% "play-json" % "2.3.8",
+  "com.codacy" %% "codacy-engine-scala-seed" % "1.0.0"
+)
 
 enablePlugins(JavaAppPackaging)
 
