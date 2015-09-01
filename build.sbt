@@ -26,7 +26,7 @@ version in Docker := "1.0"
 
 val installAll =
   s"""apk update && apk add bash curl nodejs python &&
-     |npm install -g jshint""".stripMargin.replaceAll(System.lineSeparator(), " ")
+     |npm install -g jshint@2.7.0""".stripMargin.replaceAll(System.lineSeparator(), " ")
 
 mappings in Universal <++= (resourceDirectory in Compile) map { (resourceDir: File) =>
   val src = resourceDir / "docs"
