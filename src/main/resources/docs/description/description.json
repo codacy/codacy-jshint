@@ -108,24 +108,6 @@
     "timeToFix": 5
   },
   {
-    "patternId": "indent",
-    "title": "Indentation",
-    "description": "Requires consistent indentation",
-    "parameters": [
-      {
-        "name": "indent",
-        "description": "Reporting threshold for the indentation"
-      }
-    ],
-    "timeToFix": 5
-  },
-  {
-    "patternId": "trail",
-    "title": "Prohibit trailing whitespaces",
-    "description": "Prohibits trailing whitespaces which can cause problems with multi-line strings",
-    "timeToFix": 5
-  },
-  {
     "patternId": "maxparams",
     "title": "Enforce number of function parameters",
     "description": "Requires functions to have a limit of formal parameters",
@@ -180,12 +162,6 @@
     "timeToFix": 5
   },
   {
-    "patternId": "null",
-    "title": "Prohibit == null comparisons",
-    "description": "Prohibits == null comparisons",
-    "timeToFix": 5
-  },
-  {
     "patternId": "expr",
     "title": "Prohibit unusually placed expressions",
     "description": "Prohibits use of expressions where normally you would expect to see assignments or function calls",
@@ -214,12 +190,6 @@
     "title": "Prohibit multi line strings",
     "description": "Prohibits the use of multi line strings due to whitespace error-proning",
     "timeToFix": 10
-  },
-  {
-    "patternId": "notypeof",
-    "title": "Prohibit invalid typeof operators",
-    "description": "Prohibits  invalid typeof operator values",
-    "timeToFix": 15
   },
   {
     "patternId": "sub",
