@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/f05554b8bca04bf3b428c7c265ead432)](https://www.codacy.com/app/Codacy/codacy-jshint)
 [![Build Status](https://circleci.com/gh/codacy/codacy-jshint.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/codacy/codacy-jshint)
 
 create the docker: sbt docker:publishLocal
