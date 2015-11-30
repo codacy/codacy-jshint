@@ -1,5 +1,5 @@
 
-Detects when variables are declared and never used. For example, variables `c` and `d` can be removed in this example:
+Detects when variables are declared and never used. For example, variables `b` and `c` can be removed in this example:
 
     function test(a, b) {
       var c, d = 2;
