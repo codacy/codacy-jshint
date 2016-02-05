@@ -4,10 +4,10 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
 
 import codacy.dockerApi._
+import codacy.dockerApi.utils.CommandRunner
 import codacy.jshint.JsHintPattern._
 import play.api.libs.json._
 
-import scala.sys.process._
 import scala.util.{Success, Try}
 
 object Jshint extends Tool {
@@ -20,7 +20,7 @@ object Jshint extends Tool {
 
   private[this] lazy val minusPrefix = "$minus"
 
-  def apply(sourcePath: Path, patterns: Option[Seq[PatternDef]], files: Option[Set[Path]])(implicit spec: Spec): Try[Iterable[Result]] = {
+  def apply(sourcePath: Path, patterns: Option[List[PatternDef]], files: Option[Set[Path]])(implicit spec: Spec): Try[List[Result]] = {
 
     def isKeep(patternId: PatternId): Boolean = {
       patterns.map(_.exists(_.patternId == patternId)).getOrElse(true)
@@ -29,12 +29,17 @@ object Jshint extends Tool {
     patterns.map { patterns => fileForConfig(configFromPatterns(patterns, spec.patterns)).map(Option.apply) }.
       getOrElse(Success(Option.empty[Path])).map { case maybeConfig =>
 
-      val configPart = maybeConfig.map { case path => Seq("--config", path.toAbsolutePath.toString) }.getOrElse(Seq.empty)
-      val finalPath = files.getOrElse(Seq(sourcePath)).map(_.toAbsolutePath.toString)
-      val cmd = Seq("jshint") ++ configPart ++ Seq("--verbose") ++ finalPath
+      val configPart = maybeConfig.map { case path => List("--config", path.toAbsolutePath.toString) }.getOrElse(List.empty)
+      val finalPath = files.getOrElse(List(sourcePath)).map(_.toAbsolutePath.toString)
+      val cmd = List("jshint") ++ configPart ++ List("--verbose") ++ finalPath
 
-      cmd.lineStream_!.map(outputLineAsResult).
-        collect { case Some(result:Issue) if isKeep(result.patternId) => result }
+      CommandRunner.exec(cmd) match {
+        case Right(resultFromTool) =>
+          resultFromTool.stdout.map(outputLineAsResult).collect {
+            case Some(result: Issue) if isKeep(result.patternId) => result
+          }
+        case Left(failure) => throw failure
+      }
     }
   }
 
@@ -47,7 +52,7 @@ object Jshint extends Tool {
       }
   }.flatten
 
-  private[this] def configFromPatterns(patterns: Seq[PatternDef], spec: Set[PatternSpec]): JsObject = {
+  private[this] def configFromPatterns(patterns: List[PatternDef], spec: Set[PatternSpec]): JsObject = {
     val settings = patterns.foldLeft(BaseSettings) { (settings, pattern) =>
 
       def settingSet[A](param: JsHintPattern, value: A = true)(implicit writes: Writes[A]) =
@@ -151,7 +156,7 @@ object Jshint extends Tool {
         val rawKey = key.toString
         val correctedKey = if (rawKey.startsWith(minusPrefix)) s"-${rawKey.drop(minusPrefix.length)}" else rawKey
         (correctedKey, value)
-      }.toSeq
+      }.toList
     )
   }
 
