@@ -129,7 +129,7 @@
     },
     {
       "patternId": "maxparams",
-      "category": "Complexity",
+      "category": "CodeStyle",
       "title": "Enforce number of function parameters",
       "description": "Requires functions to have a limit of formal parameters",
       "parameters": [
@@ -143,7 +143,7 @@
     },
     {
       "patternId": "maxstatements",
-      "category": "Complexity",
+      "category": "CodeStyle",
       "title": "Excessive statements",
       "description": "Requires all functions to have a limit of its statements",
       "parameters": [
@@ -157,7 +157,7 @@
     },
     {
       "patternId": "maxcomplexity",
-      "category": "Complexity",
+      "category": "CodeStyle",
       "title": "Cyclomatic complexity",
       "description": "Requires code to have low cyclomatic complexity",
       "parameters": [
