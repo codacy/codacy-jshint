@@ -23,7 +23,7 @@ object Jshint extends Tool {
   def apply(sourcePath: Path, patterns: Option[List[PatternDef]], files: Option[Set[Path]])(implicit spec: Spec): Try[List[Result]] = {
 
     def isKeep(patternId: PatternId): Boolean = {
-      patterns.map(_.exists(_.patternId == patternId)).getOrElse(true)
+      patterns.forall(_.exists(_.patternId == patternId))
     }
 
     patterns.map { patterns => fileForConfig(configFromPatterns(patterns, spec.patterns)).map(Option.apply) }.
