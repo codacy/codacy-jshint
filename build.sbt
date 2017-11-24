@@ -25,7 +25,7 @@ enablePlugins(DockerPlugin)
 version in Docker := "1.0"
 
 val installAll =
-  s"""apk update && apk add bash curl nodejs python &&
+  s"""apk update && apk add bash curl nodejs-current-npm python &&
      |npm install -g jshint@2.7.0""".stripMargin.replaceAll(System.lineSeparator(), " ")
 
 mappings in Universal <++= (resourceDirectory in Compile) map { (resourceDir: File) =>
