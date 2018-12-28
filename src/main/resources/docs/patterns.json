@@ -1,5 +1,6 @@
 {
   "name": "jshint",
+  "version": "2.9.7",
   "patterns": [
     {
       "patternId": "bitwise",

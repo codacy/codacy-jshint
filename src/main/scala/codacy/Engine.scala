@@ -1,6 +1,6 @@
 package codacy
 
-import codacy.dockerApi.DockerEngine
-import codacy.jshint.Jshint
+import codacy.jshint.JSHint
+import com.codacy.tools.scala.seed.DockerEngine
 
-object Engine extends DockerEngine(Jshint)
+object Engine extends DockerEngine(JSHint)()
