@@ -3,16 +3,19 @@ package codacy.jshint
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
 
-import codacy.dockerApi._
-import codacy.dockerApi.utils.CommandRunner
+import better.files.File
 import codacy.jshint.JsHintPattern._
+import com.codacy.plugins.api.results.Result.Issue
+import com.codacy.plugins.api.results.{Parameter, Pattern, Result, Tool}
+import com.codacy.plugins.api.{Options, Source}
+import com.codacy.tools.scala.seed.utils.CommandRunner
 import play.api.libs.json._
 
 import scala.util.{Success, Try}
 
-object Jshint extends Tool {
+object JSHint extends Tool {
 
-  private[this] implicit class PatternIdentifier(ruleId: PatternId) {
+  private[this] implicit class PatternIdentifier(ruleId: Pattern.Id) {
     def asJsHintPattern: Option[JsHintPattern] = JsHintPattern.values.find(_.toString == ruleId.value)
   }
 
@@ -20,20 +23,25 @@ object Jshint extends Tool {
 
   private[this] lazy val minusPrefix = "$minus"
 
-  def apply(sourcePath: Path, patterns: Option[List[PatternDef]], files: Option[Set[Path]])(implicit spec: Spec): Try[List[Result]] = {
+  override def apply(
+                      source: Source.Directory,
+                      configuration: Option[List[Pattern.Definition]],
+                      files: Option[Set[Source.File]],
+                      options: Map[Options.Key, Options.Value]
+                    )(implicit specification: Tool.Specification): Try[List[Result]] = {
 
-    def isKeep(patternId: PatternId): Boolean = {
-      patterns.forall(_.exists(_.patternId == patternId))
+    def isKeep(patternId: Pattern.Id): Boolean = {
+      configuration.forall(_.exists(_.patternId == patternId))
     }
 
-    patterns.map { patterns => fileForConfig(configFromPatterns(patterns, spec.patterns)).map(Option.apply) }.
-      getOrElse(Success(Option.empty[Path])).map { case maybeConfig =>
+    configuration.map { patterns => fileForConfig(configFromPatterns(patterns, specification.patterns)).map(Option.apply) }
+      .getOrElse(Success(Option.empty[Path])).map { maybeConfig =>
 
-      val configPart = maybeConfig.map { case path => List("--config", path.toAbsolutePath.toString) }.getOrElse(List.empty)
-      val finalPath = files.getOrElse(List(sourcePath)).map(_.toAbsolutePath.toString)
+      val configPart = maybeConfig.map { path => List("--config", path.toAbsolutePath.toString) }.getOrElse(List.empty)
+      val finalPath = files.getOrElse(Set(source)).map(_.path)
       val cmd = List("jshint") ++ configPart ++ List("--verbose") ++ finalPath
 
-      CommandRunner.exec(cmd) match {
+      CommandRunner.exec(cmd, Option(File(source.path).toJava)) match {
         case Right(resultFromTool) =>
           resultFromTool.stdout.map(outputLineAsResult).collect {
             case Some(result: Issue) if isKeep(result.patternId) => result
@@ -44,15 +52,15 @@ object Jshint extends Tool {
   }
 
   private[this] def outputLineAsResult(line: String): Option[Result] = Option(line).collect {
-    case raw@RegMatch(file, lineNumber, _, toolMessage, error) =>
-      Try(ResultLine(lineNumber.toInt)).toOption.flatMap { line =>
+    case RegMatch(file, lineNumber, _, toolMessage, error) =>
+      Try(Source.Line(lineNumber.toInt)).toOption.flatMap { line =>
         ruleIdAndMessage(toolMessage, error).map { case (ruleId, message) =>
-          Issue(SourcePath(file), message, ruleId, line)
+          Issue(Source.File(file), message, ruleId, line)
         }
       }
   }.flatten
 
-  private[this] def configFromPatterns(patterns: List[PatternDef], spec: Set[PatternSpec]): JsObject = {
+  private[this] def configFromPatterns(patterns: List[Pattern.Definition], spec: Set[Pattern.Specification]): JsObject = {
     val settings = patterns.foldLeft(BaseSettings) { (settings, pattern) =>
 
       def settingSet[A](param: JsHintPattern, value: A = true)(implicit writes: Writes[A]) =
@@ -61,13 +69,13 @@ object Jshint extends Tool {
       def settingWithParamValue(paramName: JsHintPattern) = {
 
         lazy val default = spec.collectFirst { case patternSpec if patternSpec.patternId == pattern.patternId =>
-          patternSpec.parameters.getOrElse(Set.empty).collectFirst { case paramSpec if paramSpec.name == ParameterName(paramName.toString) =>
+          patternSpec.parameters.getOrElse(Set.empty).collectFirst { case paramSpec if paramSpec.name == Parameter.Name(paramName.toString) =>
             paramSpec.default
           }
         }.flatten
 
         val value = pattern.parameters.flatMap(_.collectFirst {
-          case paramDef if paramDef.name == ParameterName(paramName.toString) => paramDef.value
+          case paramDef if paramDef.name == Parameter.Name(paramName.toString) => paramDef.value
         }).orElse(default)
 
         value.map(settingSet(paramName, _)).getOrElse(settings)
@@ -133,7 +141,7 @@ object Jshint extends Tool {
         case v@`funcscope` =>
           settingSet(v, false) - `-W038` - `-W091`
         case v@`iterator` =>
-          settingSet(v, false) - `-W104`
+          settingSet(v, false) - `-W104` - `-W103`
         case v@`loopfunc` =>
           settingSet(v, false) - `-W083`
         case v@`multistr` =>
@@ -160,7 +168,7 @@ object Jshint extends Tool {
     )
   }
 
-  private[this] def ruleIdAndMessage(message: String, error: String): Option[(PatternId, ResultMessage)] = {
+  private[this] def ruleIdAndMessage(message: String, error: String): Option[(Pattern.Id, Result.Message)] = {
     val msg = message.trim
 
     JsHintPattern.values.find(_.toString == s"$minusPrefix$error").collect {
@@ -204,16 +212,16 @@ object Jshint extends Tool {
       case `-W122` => notypeof
       case `-W004` => shadow
       case `-E044` => shadow
-      case `-W103` => proto
+      case `-W103` => iterator
       case `-W069` => sub
       case `-W057` => supernew
-    }.map { case rawId =>
+    }.map { rawId =>
       val message = rawId match {
         case `immed` => "You should wrap an immediate function invocation in parenthesis."
         case _ => msg
       }
 
-      (PatternId(rawId.toString), ResultMessage(message))
+      (Pattern.Id(rawId.toString), Result.Message(message))
     }
   }
 
