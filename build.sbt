@@ -11,7 +11,7 @@ scalaVersion := languageVersion
 resolvers ++= Seq("Sonatype OSS Snapshots".at("https://oss.sonatype.org/content/repositories/releases"),
   "Typesafe Repo".at("http://repo.typesafe.com/typesafe/releases/"))
 
-libraryDependencies += "com.codacy" %% "codacy-engine-scala-seed" % "3.0.296" withSources()
+libraryDependencies += "com.codacy" %% "codacy-engine-scala-seed" % "3.0.9" withSources()
 
 enablePlugins(AshScriptPlugin)
 
