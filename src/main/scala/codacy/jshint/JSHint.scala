@@ -38,8 +38,9 @@ object JSHint extends Tool {
       .getOrElse(Success(Option.empty[Path])).map { maybeConfig =>
 
       val configPart = maybeConfig.map { path => List("--config", path.toAbsolutePath.toString) }.getOrElse(List.empty)
+      val excludePart = List("--exclude", "./**/*.jsx")
       val finalPath = files.getOrElse(Set(source)).map(_.path)
-      val cmd = List("jshint") ++ configPart ++ List("--verbose") ++ finalPath
+      val cmd = List("jshint") ++ configPart ++ excludePart ++ List("--verbose") ++ finalPath
 
       CommandRunner.exec(cmd, Option(File(source.path).toJava)) match {
         case Right(resultFromTool) =>
