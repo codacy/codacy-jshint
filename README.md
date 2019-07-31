@@ -27,6 +27,10 @@ docker run -it -v $srcDir:/src  <DOCKER_NAME>:<DOCKER_VERSION>
 
 [Tool Developer Guide - Using Scala](https://support.codacy.com/hc/en-us/articles/207280379-Tool-Developer-Guide-Using-Scala)
 
+### Supported files
+
+Codacy-jshint supports only Javascript source files. If you want to analyse React's `.jsx` files you probably want to use [codacy-eslint](https://github.com/codacy/codacy-eslint) instead.
+
 ## Test
 
 We use the [codacy-plugins-test](https://github.com/codacy/codacy-plugins-test) to test our external tools integration.
