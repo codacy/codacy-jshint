@@ -1,6 +1,6 @@
 {
   "name": "jshint",
-  "version": "2.9.7",
+  "version": "2.10.2",
   "patterns": [
     {
       "patternId": "bitwise",
@@ -80,6 +80,13 @@
       "level": "Warning"
     },
     {
+      "patternId": "noreturnawait",
+      "category": "CodeStyle",
+      "title": "Prohibit return await",
+      "description": "Prohibits to await the result before returning",
+      "level": "Warning"
+    },
+    {
       "patternId": "nonew",
       "category": "CodeStyle",
       "title": "Prohibit constructor functions",
@@ -98,6 +105,13 @@
       "category": "CodeStyle",
       "title": "Enforce quotation marks",
       "description": "Requires consistency of quotation marks used",
+      "level": "Info"
+    },
+    {
+      "patternId": "regexpu",
+      "category": "CodeStyle",
+      "title": "Enforce \"u\" flag in regex",
+      "description": "Requires \"u\" flag that extends support for Unicode and enables more strict parsing rules.",
       "level": "Info"
     },
     {

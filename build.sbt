@@ -1,40 +1,32 @@
-import com.typesafe.sbt.packager.docker.{Cmd, ExecCmd}
+import com.typesafe.sbt.packager.docker.Cmd
+import sjsonnew._
+import sjsonnew.BasicJsonProtocol._
+import sjsonnew.support.scalajson.unsafe._
 
-name := """codacy-engine-jshint"""
+name := "codacy-jshint"
 
-version := "1.0.0-SNAPSHOT"
+scalaVersion := "2.12.10"
 
-val languageVersion = "2.12.8"
+lazy val toolVersion = settingKey[String]("The version of the underlying tool retrieved from patterns.json")
 
-scalaVersion := languageVersion
+toolVersion := {
+  case class Patterns(name: String, version: String)
+  implicit val patternsIso: IsoLList[Patterns] =
+    LList.isoCurried((p: Patterns) => ("name", p.name) :*: ("version", p.version) :*: LNil) {
+      case (_, n) :*: (_, v) :*: LNil => Patterns(n, v)
+    }
 
-resolvers ++= Seq("Sonatype OSS Snapshots".at("https://oss.sonatype.org/content/repositories/releases"),
-  "Typesafe Repo".at("http://repo.typesafe.com/typesafe/releases/"))
+  val jsonFile = (resourceDirectory in Compile).value / "docs" / "patterns.json"
+  val json = Parser.parseFromFile(jsonFile)
+  val patterns = json.flatMap(Converter.fromJson[Patterns])
+  patterns.get.version
+}
 
-libraryDependencies += "com.codacy" %% "codacy-engine-scala-seed" % "3.0.9" withSources()
+libraryDependencies += "com.codacy" %% "codacy-engine-scala-seed" % "3.1.0"
 
 enablePlugins(AshScriptPlugin)
 
 enablePlugins(DockerPlugin)
-
-version in Docker := "1.0.0-SNAPSHOT"
-
-organization := "com.codacy"
-
-lazy val toolVersion = taskKey[String]("Retrieve the version of the underlying tool from patterns.json")
-toolVersion := {
-  import better.files.File
-  import play.api.libs.json.{JsString, JsValue, Json}
-
-  val jsonFile = resourceDirectory.in(Compile).value / "docs" / "patterns.json"
-  val patternsJsonValues = Json.parse(File(jsonFile.toPath).contentAsString).as[Map[String, JsValue]]
-
-  patternsJsonValues
-    .collectFirst {
-      case ("version", JsString(version)) => version
-    }
-    .getOrElse(throw new Exception("Failed to retrieve version from docs/patterns.json"))
-}
 
 def installAll(toolVersion: String) =
   s"""apk update &&
@@ -44,17 +36,16 @@ def installAll(toolVersion: String) =
      |rm -rf /var/cache/apk/*""".stripMargin
     .replaceAll(System.lineSeparator(), " ")
 
-mappings.in(Universal) ++= resourceDirectory
-  .in(Compile)
-  .map { resourceDir: File =>
+Universal / mappings ++= {
+  (Compile / resourceDirectory).map { resourceDir: File =>
     val src = resourceDir / "docs"
     val dest = "/docs"
 
-    (for {
-      path <- better.files.File(src.toPath).listRecursively()
-      if !path.isDirectory
-    } yield path.toJava -> path.toString.replaceFirst(src.toString, dest)).toSeq
-  }.value
+    for {
+      path <- src.allPaths.get if !path.isDirectory
+    } yield path -> path.toString.replaceFirst(src.toString, dest)
+  }
+}.value
 
 val dockerUser = "docker"
 val dockerGroup = "docker"
@@ -65,15 +56,15 @@ daemonGroup in Docker := dockerGroup
 
 dockerBaseImage := "openjdk:8-jre-alpine"
 
-dockerCommands := {
-  dockerCommands.dependsOn(toolVersion).value.flatMap {
-    case cmd @ Cmd("ADD", _) =>
-      List(Cmd("RUN", s"adduser -u 2004 -D $dockerUser"),
-        cmd,
-        Cmd("RUN", installAll(toolVersion.value)),
-        Cmd("RUN", "mv /opt/docker/docs /docs"),
-        ExecCmd("RUN", Seq("chown", "-R", s"$dockerUser:$dockerGroup", "/docs"): _*),
-        Cmd("ENV", "NODE_PATH /usr/lib/node_modules"))
-    case other => List(other)
-  }
+dockerCommands := dockerCommands.value.flatMap {
+  case cmd @ Cmd("WORKDIR", _) => Seq(Cmd("WORKDIR", "/src"))
+  case cmd @ Cmd("ADD", _) =>
+    Seq(
+      Cmd("RUN", s"adduser -u 2004 -D $dockerUser"),
+      cmd,
+      Cmd("RUN", installAll(toolVersion.value)),
+      Cmd("ENV", "NODE_PATH /usr/lib/node_modules"),
+      Cmd("RUN", "mv /opt/docker/docs /docs")
+    )
+  case other => List(other)
 }
