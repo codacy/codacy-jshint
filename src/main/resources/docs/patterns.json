@@ -66,6 +66,13 @@
       "level": "Warning"
     },
     {
+      "patternId": "leanswitch",
+      "category": "ErrorProne",
+      "title": "Enforce unnecessary switch clauses",
+      "description": "Prohibits the use of a switch clause that has no effect.",
+      "level": "Warning"
+    },
+    {
       "patternId": "newcap",
       "category": "CodeStyle",
       "title": "Enforce capitalized constructor",

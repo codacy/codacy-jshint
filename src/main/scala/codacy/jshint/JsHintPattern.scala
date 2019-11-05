@@ -3,7 +3,7 @@ package codacy.jshint
 private[jshint] object JsHintPattern extends Enumeration {
   type JsHintPattern = Value
 
-  val bitwise, camelcase, curly, eqeqeq, es3, forin, freeze, immed, indent, latedef, newcap, noarg, noempty,
+  val bitwise, camelcase, curly, eqeqeq, es3, forin, freeze, immed, indent, latedef, leanswitch, newcap, noarg, noempty,
   noreturnawait, nonew, plusplus, quotmark, regexpu, undef, unused, strict, trailing, maxparams, maxdepth,
   maxstatements, maxcomplexity, maxlen, asi, boss, debug, eqnull, esnext, evil, expr, funcscope, gcl, globalstrict,
   iterator, lastsemic, laxbreak, laxcomma, loopfunc, maxerr, moz, multistr, notypeof, `null`, proto, scripturl,
@@ -16,6 +16,6 @@ private[jshint] object JsHintPattern extends Enumeration {
   `-W074`, `-W075`, `-W076`, `-W077`, `-W078`, `-W079`, `-W080`, `-W081`, `-W082`, `-W083`, `-W084`, `-W085`, `-W086`,
   `-W087`, `-W088`, `-W089`, `-W090`, `-W091`, `-W092`, `-W093`, `-W094`, `-W095`, `-W096`, `-W097`, `-W098`, `-W099`,
   `-W100`, `-W101`, `-W102`, `-W103`, `-W104`, `-W105`, `-W106`, `-W107`, `-W108`, `-W109`, `-W110`, `-W112`, `-W113`,
-  `-W114`, `-W115`, `-W116`, `-W117`, `-W118`, `-W119`, `-W121`, `-W122`, `-W147`, `-E044`, browser, couch, devel, dojo,
-  jquery, mootools, node, nonstandard, phantom, prototypejs, rhino, worker, wsh, yui = Value
+  `-W114`, `-W115`, `-W116`, `-W117`, `-W118`, `-W119`, `-W121`, `-W122`, `-W145`, `-W147`, `-E044`, browser, couch,
+  devel, dojo, jquery, mootools, node, nonstandard, phantom, prototypejs, rhino, worker, wsh, yui = Value
 }

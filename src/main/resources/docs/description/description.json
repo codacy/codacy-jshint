@@ -54,6 +54,12 @@
     "timeToFix": 10
   },
   {
+    "patternId": "leanswitch",
+    "title": "Enforce unnecessary switch clauses",
+    "description": "Prohibits the use of a switch clause that has no effect.",
+    "timeToFix": 10
+  },
+  {
     "patternId": "newcap",
     "title": "Enforce capitalized constructor",
     "description": "Requires capitalization of names of constructor functions",

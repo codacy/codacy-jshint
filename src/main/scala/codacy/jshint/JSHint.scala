@@ -115,6 +115,8 @@ object JSHint extends Tool {
             settingSet(v) - `-W062`
           case v @ `latedef` =>
             settingWithParamValue(v) - `-W003`
+          case v @ `leanswitch` =>
+            settingWithParamValue(v) - `-W145`
           case v @ `newcap` =>
             settingSet(v) - `-W055`
           case v @ `noarg` =>
