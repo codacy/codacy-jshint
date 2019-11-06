@@ -72,6 +72,12 @@
     "timeToFix": 30
   },
   {
+    "patternId": "noreturnawait",
+    "title": "Prohibit return await",
+    "description": "Prohibits to await the result before returning",
+    "timeToFix": 10
+  },
+  {
     "patternId": "nonew",
     "title": "Prohibit constructor functions",
     "description": "Prohibits the use of constructor functions for side-effects",
