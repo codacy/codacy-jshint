@@ -20,9 +20,11 @@ package object jshint {
     newcap -> false,
     noarg -> false,
     noempty -> false,
+    noreturnawait -> false,
     nonew -> false,
     plusplus -> false,
     quotmark -> false,
+    regexpu -> false,
     undef -> false,
     unused -> false,
     strict -> false,
@@ -32,7 +34,6 @@ package object jshint {
     maxstatements -> false,
     maxcomplexity -> false,
     maxlen -> false,
-
     //Relaxing options
     asi -> true,
     boss -> true,
@@ -48,8 +49,8 @@ package object jshint {
     lastsemic -> true,
     laxbreak -> true,
     laxcomma -> true,
-    loopfunc -> true).mapValues(Json.toJson(_)) ++ Map(
-    maxerr -> 10000).mapValues(Json.toJson(_)) ++ Map(
+    loopfunc -> true
+  ).mapValues(Json.toJson(_)) ++ Map(maxerr -> 10000).mapValues(Json.toJson(_)) ++ Map(
     moz -> true,
     multistr -> true,
     notypeof -> true,
@@ -60,7 +61,6 @@ package object jshint {
     sub -> true,
     supernew -> true,
     validthis -> true,
-
     //Warnings, see https://github.com/jshint/jshint/blob/2.1.4/src/shared/messages.js
     `-W001` -> true,
     `-W002` -> true,
@@ -184,7 +184,6 @@ package object jshint {
     //-W117 -> Json.toJson(true),
     `-W118` -> true,
     `-W119` -> true,
-
     //Environments
     browser -> true,
     couch -> true,

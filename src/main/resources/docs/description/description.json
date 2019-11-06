@@ -54,6 +54,12 @@
     "timeToFix": 10
   },
   {
+    "patternId": "leanswitch",
+    "title": "Enforce unnecessary switch clauses",
+    "description": "Prohibits the use of a switch clause that has no effect.",
+    "timeToFix": 10
+  },
+  {
     "patternId": "newcap",
     "title": "Enforce capitalized constructor",
     "description": "Requires capitalization of names of constructor functions",
@@ -61,9 +67,21 @@
   },
   {
     "patternId": "noarg",
-    "title": "Prohibit arguments.caller and arguments.callee",
-    "description": "Prohibits the use of arguments.caller and arguments.callee",
+    "title": "Prohibit return await",
+    "description": "Prohibits to await the result before returning",
     "timeToFix": 30
+  },
+  {
+    "patternId": "noreturnawait",
+    "title": "Prohibit return await",
+    "description": "Prohibits to await the result before returning",
+    "timeToFix": 10
+  },
+  {
+    "patternId": "nonew",
+    "title": "Prohibit constructor functions",
+    "description": "Prohibits the use of constructor functions for side-effects",
+    "timeToFix": 5
   },
   {
     "patternId": "nonew",
@@ -81,6 +99,12 @@
     "patternId": "quotmark",
     "title": "Enforce quotation marks",
     "description": "Requires consistency of quotation marks used",
+    "timeToFix": 5
+  },
+  {
+    "patternId": "regexpu",
+    "title": "Enforce \"u\" flag in regex",
+    "description": "Requires \"u\" flag that extends support for Unicode and enables more strict parsing rules.",
     "timeToFix": 5
   },
   {
