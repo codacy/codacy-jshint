@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<checkstyle version="4.3">
+    <file name="bitwise.js">
+        <error source="curly" line="6" message="Expected '{' and instead saw 'console'." severity="info" />
+        <error source="curly" line="15" message="Expected '{' and instead saw 'return'." severity="info" />
+    </file>
+</checkstyle>
