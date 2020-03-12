@@ -1,4 +1,4 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/f05554b8bca04bf3b428c7c265ead432)](https://www.codacy.com/app/Codacy/codacy-jshint)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f05554b8bca04bf3b428c7c265ead432)](https://www.codacy.com/gh/codacy/codacy-jshint?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=codacy/codacy-jshint&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://circleci.com/gh/codacy/codacy-jshint.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/codacy/codacy-jshint)
 
 # Codacy JSHint
