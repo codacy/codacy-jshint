@@ -5,37 +5,44 @@
     {
       "patternId": "bitwise",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "camelcase",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "curly",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "eqeqeq",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "forin",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "freeze",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "immed",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "latedef",
@@ -46,47 +53,56 @@
           "default": "nofunc"
         }
       ],
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "leanswitch",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "newcap",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "noarg",
       "category": "Compatibility",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "noreturnawait",
       "category": "CodeStyle",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "nonew",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "plusplus",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "quotmark",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "regexpu",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "unused",
@@ -97,7 +113,8 @@
           "default": true
         }
       ],
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": true
     },
     {
       "patternId": "maxlen",
@@ -108,7 +125,8 @@
           "default": 200
         }
       ],
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "maxparams",
@@ -119,7 +137,8 @@
           "default": 7
         }
       ],
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "maxstatements",
@@ -130,7 +149,8 @@
           "default": 3
         }
       ],
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "maxcomplexity",
@@ -141,52 +161,62 @@
           "default": 7
         }
       ],
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "asi",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     },
     {
       "patternId": "boss",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "debug",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "expr",
       "category": "UnusedCode",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "funcscope",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "iterator",
       "category": "Compatibility",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "loopfunc",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "multistr",
       "category": "ErrorProne",
-      "level": "Warning"
+      "level": "Warning",
+      "enabled": false
     },
     {
       "patternId": "sub",
       "category": "CodeStyle",
-      "level": "Info"
+      "level": "Info",
+      "enabled": false
     }
   ]
 }
