@@ -1,6 +1,6 @@
 {
   "name": "jshint",
-  "version": "2.10.2",
+  "version": "2.12.0",
   "patterns": [
     {
       "patternId": "bitwise",
@@ -35,6 +35,12 @@
     {
       "patternId": "freeze",
       "category": "ErrorProne",
+      "level": "Warning",
+      "enabled": false
+    },
+    {
+      "patternId": "futurehostile",
+      "category": "Compatibility",
       "level": "Warning",
       "enabled": false
     },
@@ -75,6 +81,24 @@
       "enabled": false
     },
     {
+      "patternId": "nocomma",
+      "category": "CodeStyle",
+      "level": "Info",
+      "enabled": false
+    },
+    {
+      "patternId": "noempty",
+      "category": "CodeStyle",
+      "level": "Info",
+      "enabled": false
+    },
+    {
+      "patternId": "nonbsp",
+      "category": "CodeStyle",
+      "level": "Info",
+      "enabled": false
+    },
+    {
       "patternId": "noreturnawait",
       "category": "CodeStyle",
       "level": "Warning",
@@ -84,6 +108,12 @@
       "patternId": "nonew",
       "category": "CodeStyle",
       "level": "Info",
+      "enabled": false
+    },
+    {
+      "patternId": "notypeof",
+      "category": "ErrorProne",
+      "level": "Warning",
       "enabled": false
     },
     {
@@ -100,6 +130,12 @@
     },
     {
       "patternId": "regexpu",
+      "category": "CodeStyle",
+      "level": "Info",
+      "enabled": false
+    },
+    {
+      "patternId": "singleGroups",
       "category": "CodeStyle",
       "level": "Info",
       "enabled": false

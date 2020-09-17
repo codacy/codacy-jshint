@@ -36,6 +36,12 @@
     "timeToFix": 20
   },
   {
+    "patternId": "futurehostile",
+    "title": "Prohibit identifiers defined in future versions of JavaScript",
+    "description": "This option enables warnings about the use of identifiers which are defined in future versions of JavaScript.",
+    "timeToFix": 5
+  },
+  {
     "patternId": "immed",
     "title": "Enforce parentheses in function calls",
     "description": "Requires the use of parentheses in immediate function invocations",
@@ -72,6 +78,24 @@
     "timeToFix": 30
   },
   {
+    "patternId": "nocomma",
+    "title": "Prohibit comma operator",
+    "description": "Prohibits the use of the comma operator.",
+    "timeToFix": 10
+  },
+  {
+    "patternId": "noempty",
+    "title": "Prohibit empty blocks",
+    "description": "Prohibits the use of empty blocks.",
+    "timeToFix": 5
+  },
+  {
+    "patternId": "nonbsp",
+    "title": "Prohibit non-breaking spaces",
+    "description": "Prohibits the use of non-breaking spaces.",
+    "timeToFix": 5
+  },
+  {
     "patternId": "noreturnawait",
     "title": "Prohibit return await",
     "description": "Prohibits to await the result before returning",
@@ -90,6 +114,12 @@
     "timeToFix": 5
   },
   {
+    "patternId": "notypeof",
+    "title": "Suppress warnings about invalid `typeof` operator values",
+    "description": "Do not use this option unless you're absolutely sure you don't want these checks.",
+    "timeToFix": 5
+  },
+  {
     "patternId": "plusplus",
     "title": "Prohibit ++ and --",
     "description": "Prohibits the use of unary increment and decrement operators",
@@ -105,6 +135,12 @@
     "patternId": "regexpu",
     "title": "Enforce \"u\" flag in regex",
     "description": "Requires \"u\" flag that extends support for Unicode and enables more strict parsing rules.",
+    "timeToFix": 5
+  },
+  {
+    "patternId": "singleGroups",
+    "title": "Prohibit grouping operator",
+    "description": "Prohibits the use of the grouping operator when it is not strictly required.",
     "timeToFix": 5
   },
   {

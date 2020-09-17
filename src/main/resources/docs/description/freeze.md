@@ -1,8 +1,7 @@
+# freeze
 
-Javascript allows you to extend native objects, which may sound appealing because your code will look better and simpler.
-However, it can cause several problems, namely:
-
-* In future versions, your method can accidentally override newly added built-ins
-* If you are developing a library, your users may experience unexpected behaviour because your code is not contained
-* It can lead to collisions and namespace conflicts.
-      
+This options prohibits overwriting prototypes of native objects such as
+`Array`, `Date` and so on.
+    // jshint freeze:true
+    Array.prototype.count = function (value) { return 4; };
+    // -> Warning: Extending prototype of native object: 'Array'.

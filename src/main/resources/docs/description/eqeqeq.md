@@ -1,12 +1,9 @@
+# eqeqeq
 
-The == comparison in Javascript is dangerous because its behaviour depends on the type of data being compared. For example:
-
-    1 == "1"  //true because "1" is converted to 1
-    1 === "1" //false
-
-    1 == true  //true because true is converted to 1
-    1 === true //false
-
-Most of the time, you want to make an explicit comparison without any surprises so you should use === and !===.
-For a detailed description of the type conversion rules you can check [the documentation](http://es5.github.io/#x11.9.3).
-      
+This options prohibits the use of `==` and `!=` in favor of `===` and
+`!==`. The former try to coerce values before comparing them which can
+lead to some unexpected results. The latter don't do any coercion so
+they are generally safer. If you would like to learn more about type
+coercion in JavaScript, we recommend [Truth, Equality and
+JavaScript](http://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/)
+by Angus Croll.
