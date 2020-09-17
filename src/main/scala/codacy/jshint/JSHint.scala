@@ -111,6 +111,8 @@ object JSHint extends Tool {
             settingSet(v) - `-W089`
           case v @ `freeze` =>
             settingSet(v) - `-W121`
+          case v @ `futurehostile` =>
+            settingSet(v) - `-W129`
           case v @ `immed` =>
             settingSet(v) - `-W062`
           case v @ `latedef` =>
@@ -121,6 +123,12 @@ object JSHint extends Tool {
             settingSet(v) - `-W055`
           case v @ `noarg` =>
             settingSet(v) - `-W059`
+          case v @ `nocomma` =>
+            settingSet(v) - `-W127`
+          case v @ `noempty` =>
+            settingSet(v) - `-W035`
+          case v @ `nonbsp` =>
+            settingSet(v) - `-W125`
           case v @ `nonew` =>
             settingSet(v) - `-W031`
           case v @ `plusplus` =>
@@ -129,6 +137,8 @@ object JSHint extends Tool {
             settingSet(v) - `-W110`
           case v @ `regexpu` =>
             settingSet(v) - `-W147`
+          case v @ `singleGroups` =>
+            settingSet(v) - `-W126`
           case v @ `undef` =>
             settingSet(v) - `-W117`
           case v @ `unused` =>
@@ -137,6 +147,8 @@ object JSHint extends Tool {
             settingWithParamValue(v) - `-W101`
           case v @ `trail` =>
             settingSet(v) - `-W044`
+          case v @ `trailingcomma` =>
+            settingSet(v) - `-W140`
           case v @ `maxparams` =>
             settingWithParamValue(v) - `-W072`
           case v @ `maxdepth` =>
@@ -205,9 +217,15 @@ object JSHint extends Tool {
         case `-W016` if msg.matches("""Unexpected use of '(\+\+|--)'.*""") => plusplus
         case `-W117` if msg.matches(""".*is not defined.*""") => undef
         case `-W098` if msg.matches(""".*is defined but never used.*""") => unused
+        case `-W035` => noempty
         case `-W055` => newcap
         case `-W089` => forin
         case `-W121` => freeze
+        case `-W125` => nonbsp
+        case `-W126` => singleGroups
+        case `-W127` => nocomma
+        case `-W129` => futurehostile
+        case `-W140` => trailingcomma
         case `-W062` => immed
         case `-W101` => maxlen
         case `-W110` => quotmark

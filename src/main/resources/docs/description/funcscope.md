@@ -1,15 +1,15 @@
+# funcscope
 
-Even though JavaScript has only two real scopes, declaring variables inside control structures and using them outside of those structures leads to confusion among people new to the language and causes hard-to-debug bugs.
-
+This option suppresses warnings about declaring variables inside
+of control structures while accessing them later from the outside.
+Even though identifiers declared with `var` have two real scopes—global
+and function—such practice leads to confusion among people new to
+the language and hard-to-debug bugs. This is why, by default, JSHint
+warns about variables that are used outside of their intended scope.
     function test() {
-       if (true) {
+      if (true) {
         var x = 0;
       }
-
-      x += 1; // 'x' used out of scope.
+      x += 1; // Default: 'x' used out of scope.
+                // No warning when funcscope:true
     }
-
-You should declare your variables at the function scope.
-
-[Source](http://www.jshint.com/docs/options/#funcscope)
-      
