@@ -22,7 +22,7 @@ toolVersion := {
   patterns.get.version
 }
 
-libraryDependencies += "com.codacy" %% "codacy-engine-scala-seed" % "4.0.2"
+libraryDependencies += "com.codacy" %% "codacy-engine-scala-seed" % "5.0.1"
 
 enablePlugins(AshScriptPlugin)
 
