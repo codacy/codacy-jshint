@@ -82,16 +82,16 @@ object JSHint extends Tool {
 
         lazy val default = spec.collectFirst {
           case patternSpec if patternSpec.patternId == pattern.patternId =>
-            patternSpec.parameters.getOrElse(Set.empty).collectFirst {
+            patternSpec.parameters.collectFirst {
               case paramSpec if paramSpec.name == Parameter.Name(paramName.toString) =>
                 paramSpec.default
             }
         }.flatten
 
         val value = pattern.parameters
-          .flatMap(_.collectFirst {
+          .collectFirst {
             case paramDef if paramDef.name == Parameter.Name(paramName.toString) => paramDef.value
-          })
+          }
           .orElse(default)
 
         value.map(settingSet(paramName, _)).getOrElse(settings)
