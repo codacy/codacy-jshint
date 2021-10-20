@@ -30,7 +30,7 @@ enablePlugins(DockerPlugin)
 
 def installAll(toolVersion: String) =
   s"""apk update &&
-     |apk add nodejs-npm &&
+     |apk add nodejs npm &&
      |npm install -g jshint@$toolVersion &&
      |rm -rf /tmp/* &&
      |rm -rf /var/cache/apk/*""".stripMargin
@@ -54,7 +54,7 @@ daemonUser in Docker := dockerUser
 
 daemonGroup in Docker := dockerGroup
 
-dockerBaseImage := "openjdk:8-jre-alpine"
+dockerBaseImage := "amazoncorretto:8-alpine3.14-jre"
 
 dockerCommands := dockerCommands.value.flatMap {
   case cmd @ Cmd("WORKDIR", _) => Seq(Cmd("WORKDIR", "/src"))
